@@ -36,6 +36,8 @@ Go through the paper's **tables, key figures, and ablations**. For each
 
 - a stable `id` (e.g. `table2-cifar10-acc`),
 - `metric_name`, `reported_value`, `unit`,
+- `reported_std` when the paper gives the result as mean ± σ over seeds/folds —
+  this lets agreement be judged by statistical consistency, not a fixed tolerance,
 - `direction` (`higher`/`lower` = better) so beating the paper still counts,
 - `source_ref` (e.g. "Table 2, row CIFAR-10"), `dataset`, and any `notes`.
 

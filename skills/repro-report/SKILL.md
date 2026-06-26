@@ -57,6 +57,9 @@ Concrete actions to close remaining gaps.
 - **Status legend:** ✓ reproduced · ~ partial · ✗ mismatch · ⛔ blocked · · pending.
 - **Cite provenance.** Distinguish numbers from released checkpoints vs trained
   from scratch.
+- **Report consistency, not just error.** When the paper gives mean ± σ, state how
+  many σ the reproduced value sits from the reported mean (within ~2σ is
+  statistically consistent), rather than leaning only on percentage error.
 - **Make it standalone.** A reader who hasn't seen the session should understand
   what was done and how much of the paper holds up.
 

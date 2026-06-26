@@ -125,6 +125,7 @@ export default function reproExtension(pi: ExtensionAPI): void {
     description: Type.String({ description: "What the claim asserts, in words." }),
     metric_name: Type.String({ description: "Metric display name, e.g. 'top-1 accuracy'." }),
     reported_value: Type.Number({ description: "The value reported in the paper." }),
+    reported_std: Type.Optional(Type.Number({ description: "Reported uncertainty (standard deviation) when the paper gives mean ± σ over seeds/folds. When set, agreement is judged in units of σ (within ~2σ = consistent) instead of by relative tolerance." })),
     unit: Type.Optional(Type.String({ description: "Unit for display, e.g. '%' or 'ms'." })),
     direction: Type.Optional(Type.Union([Type.Literal("higher"), Type.Literal("lower")], { description: "Which direction is better. Used so that beating the paper still counts as reproduced." })),
     tolerance: Type.Optional(Type.Number({ description: "Relative tolerance for this claim (fraction). Falls back to the session default." })),
@@ -251,9 +252,16 @@ export default function reproExtension(pi: ExtensionAPI): void {
         status = params.status;
       } else if (params.reproduced_value !== undefined) {
         const tol = claim.tolerance ?? config?.defaultTolerance;
-        const outcome = compare(claim.reported_value, params.reproduced_value, tol, claim.direction);
+        const outcome = compare(claim.reported_value, params.reproduced_value, {
+          tolerance: tol,
+          direction: claim.direction,
+          reportedStd: claim.reported_std,
+        });
         status = outcome.status;
-        detail = ` (relative error ${(outcome.relativeError * 100).toFixed(2)}%, tolerance ${((tol ?? 0) * 100).toFixed(2)}%)`;
+        detail =
+          outcome.basis === "sigma"
+            ? ` (${outcome.z!.toFixed(2)}σ from reported, consistent ≤ ${2}σ)`
+            : ` (relative error ${(outcome.relativeError * 100).toFixed(2)}%, tolerance ${((tol ?? 0) * 100).toFixed(2)}%)`;
       } else {
         status = "blocked";
       }

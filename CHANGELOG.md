@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Claim grading is now **uncertainty-relative**: when a claim carries a
+  `reported_std` (paper reports mean ± σ), agreement is judged in units of σ
+  (within ~2σ ≈ consistent) instead of by relative tolerance, and degrades
+  gracefully to the tolerance check when no σ is given. `register_claim` gains a
+  `reported_std` parameter; the dashboard shows `± σ`. Adapted from
+  significance-aware reproduction grading in the literature — see
+  `docs/related-work.md`.
+
 ## 0.2.0 — 2026-06-26
 
 - Setup now records the reproduction `language` and whether to use a virtual

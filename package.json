@@ -1,6 +1,6 @@
 {
   "name": "pi-repro",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "Reproduce the quantitative results of an academic paper — ingest, gap-analyze the code, plan, reproduce each claim, and report what does and doesn't replicate. A pi extension.",
   "keywords": [
@@ -15,6 +15,14 @@
   ],
   "license": "MIT",
   "author": "Eric Jahns <jejahns20@gmail.com>",
+  "homepage": "https://github.com/EricJahns/pi-repro#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EricJahns/pi-repro.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EricJahns/pi-repro/issues"
+  },
   "engines": {
     "node": ">=22"
   },

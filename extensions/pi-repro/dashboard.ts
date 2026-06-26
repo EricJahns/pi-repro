@@ -64,9 +64,13 @@ export function buildFullscreenLines(root: string): string[] {
   } else {
     for (const c of claims) {
       const glyph = STATUS_GLYPH[c.status];
+      const reported =
+        c.reported_std !== undefined
+          ? `${fmt(c.reported_value, c.unit)} ± ${trimNum(c.reported_std)}`
+          : fmt(c.reported_value, c.unit);
       lines.push(`${glyph} ${c.id}  [${c.status}]`);
       lines.push(
-        `    ${c.metric_name}: reported ${fmt(c.reported_value, c.unit)} · ` +
+        `    ${c.metric_name}: reported ${reported} · ` +
           `reproduced ${fmt(c.reproduced_value, c.unit)}` +
           (c.source_ref ? `  (${c.source_ref})` : ""),
       );

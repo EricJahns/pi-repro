@@ -14,42 +14,70 @@ import {
 } from "../extensions/pi-repro/claims.ts";
 
 test("compare: within tolerance is reproduced", () => {
-  const out = compare(90, 89, 0.05);
+  const out = compare(90, 89, { tolerance: 0.05 });
   assert.equal(out.status, "reproduced");
+  assert.equal(out.basis, "relative");
   assert.equal(out.withinTolerance, true);
 });
 
 test("compare: just outside tolerance but close is partial", () => {
   // 10% off with a 5% tolerance → within 3x → partial
-  const out = compare(100, 110, 0.05);
+  const out = compare(100, 110, { tolerance: 0.05 });
   assert.equal(out.status, "partial");
   assert.equal(out.withinTolerance, false);
 });
 
 test("compare: far off is mismatch", () => {
-  const out = compare(100, 50, 0.05);
+  const out = compare(100, 50, { tolerance: 0.05 });
   assert.equal(out.status, "mismatch");
 });
 
 test("compare: beating the paper counts as reproduced (direction higher)", () => {
-  const out = compare(90, 95, 0.01, "higher");
+  const out = compare(90, 95, { tolerance: 0.01, direction: "higher" });
   assert.equal(out.status, "reproduced");
   assert.equal(out.withinTolerance, false);
 });
 
 test("compare: beating the paper counts as reproduced (direction lower)", () => {
-  const out = compare(100, 80, 0.01, "lower");
+  const out = compare(100, 80, { tolerance: 0.01, direction: "lower" });
   assert.equal(out.status, "reproduced");
 });
 
 test("compare: default tolerance applies", () => {
-  const out = compare(100, 100 * (1 + DEFAULT_TOLERANCE));
+  const out = compare(100, 100 * (1 + DEFAULT_TOLERANCE), {});
   assert.equal(out.status, "reproduced");
 });
 
 test("compare: handles reported value of zero without NaN", () => {
-  const out = compare(0, 0.001);
+  const out = compare(0, 0.001, {});
   assert.ok(Number.isFinite(out.relativeError));
+});
+
+test("compare (sigma): within ~2σ is reproduced even past relative tolerance", () => {
+  // 0.85 vs 0.90: 5.9% rel error (would be partial/mismatch) but only 1σ off
+  const out = compare(0.9, 0.85, { tolerance: 0.02, reportedStd: 0.05 });
+  assert.equal(out.basis, "sigma");
+  assert.equal(out.status, "reproduced");
+  assert.ok(Math.abs(out.z - 1) < 1e-9);
+});
+
+test("compare (sigma): ~3σ is partial", () => {
+  const out = compare(0.9, 0.75, { reportedStd: 0.05 });
+  assert.equal(out.basis, "sigma");
+  assert.equal(out.status, "partial");
+});
+
+test("compare (sigma): large favorable deviation is a mismatch, not a free pass", () => {
+  // 10σ better in the 'higher' direction must NOT be waved through
+  const out = compare(0.9, 1.4, { direction: "higher", reportedStd: 0.05 });
+  assert.equal(out.basis, "sigma");
+  assert.equal(out.status, "mismatch");
+});
+
+test("compare (sigma): std of 0 falls back to relative basis", () => {
+  const out = compare(100, 101, { tolerance: 0.05, reportedStd: 0 });
+  assert.equal(out.basis, "relative");
+  assert.equal(out.status, "reproduced");
 });
 
 test("upsert inserts then updates by id", () => {
