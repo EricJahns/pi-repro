@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assests/logo.png" alt="pi-repro logo" width="200">
+  <img src="assets/logo.svg" alt="pi-repro logo" width="800">
 </p>
 
 <h1 align="center">pi-repro</h1>
@@ -63,7 +63,7 @@ reproduce https://arxiv.org/abs/XXXX.XXXXX  (optionally: repo https://github.com
 ```
 
 The `repro-create` skill drives everything from there: ingest, gap analysis,
-plan, run, report. All state lands in a single `.repro/` folderCan you  at the project
+plan, run, report. All state lands in a single `.repro/` folder at the project
 root, so the work **survives restarts and context resets** — pick up exactly
 where you left off, and hand the folder to anyone who wants to check your work.
 
