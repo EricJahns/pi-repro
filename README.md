@@ -1,20 +1,50 @@
-# pi-repro
+<p align="center">
+  <img src="assests/logo.png" alt="pi-repro logo" width="200">
+</p>
 
-A [pi](https://pi.dev) extension with one goal: **reproduce the quantitative
-results of an academic paper.**
+<h1 align="center">pi-repro</h1>
 
-You give it a paper (link, PDF, arXiv id, or DOI) and — optionally — a reference
-GitHub repo. It ingests the paper, extracts every result you want to reproduce as
-a tracked *claim*, gap-analyzes the provided code (because shipped code is almost
-never complete enough to reproduce the whole paper), plans the reproduction, runs
-each experiment, and reports honestly what does and doesn't replicate.
+> **Trust, but verify — one claim at a time.**
 
-It is built on the same idea as
+A [pi](https://pi.dev) extension with one job: **reproduce the quantitative
+results of an academic paper**, and tell you honestly which ones survive contact
+with reality.
+
+**[Install](#install) · [Usage](#usage) · [How it works](#how-it-works)**
+
+You hand it a paper (link, PDF, arXiv id, or DOI) and — optionally — a reference
+GitHub repo. It reads the paper, pulls out every number you care about as a
+tracked *claim*, audits the shipped code for the gaps it always has, plans the
+reproduction, runs each experiment, and files a report on what replicated, what
+didn't, and what flat-out refused to run.
+
+It shares its blueprint with
 [`pi-autoresearch`](https://github.com/davebcn87/pi-autoresearch): the
-**extension** is domain-agnostic machinery; the **skills** encode the domain
-knowledge. The difference is the goal — reproduction is *verification*, not
-optimization, so pi-repro never tunes a number to match the paper by deviating
-from its method. It reports whatever it gets.
+**extension** is domain-agnostic machinery; the **skills** carry the domain
+knowledge. The difference is the goal. Autoresearch *optimizes* — it tunes until
+the number goes up. pi-repro *verifies* — it follows the paper's method and
+reports whatever falls out, even when that's an inconvenient truth. It will never
+nudge a result toward the published value by quietly leaving the method behind.
+
+Because the gap between "the paper says 94.2%" and "I got 94.2% on my machine" is
+where science actually happens.
+
+## Why you'd want this
+
+- **Peer reviewers & area chairs** — turn "the authors claim X" into "I ran it
+  and got X (or didn't)" before you sign off, with a paper trail you can attach.
+- **PhD students & researchers** — before you build on someone's result, confirm
+  the foundation holds. Reproduce the baseline you're about to beat so your
+  delta is real and not a difference in setup.
+- **ML engineers** — vet a flashy SOTA claim against your own hardware and data
+  pipeline before you bet a sprint on integrating it.
+- **Reproducibility & ML-reproducibility-challenge teams** — run a fleet of
+  papers through one consistent, auditable pipeline instead of a pile of
+  bespoke shell scripts.
+- **Educators** — hand students a paper and a reproduction report side by side,
+  and teach them where published numbers come from (and where they leak).
+- **Your future self** — six months from now, when a reviewer asks "did this
+  actually work?", the `.repro/` folder already has the receipts.
 
 ## Install
 
@@ -24,15 +54,20 @@ pi install npm:pi-repro
 pi install file:/path/to/pi-repro
 ```
 
-Then, in a project where you want to do the work:
+## Usage
+
+In a project where you want to do the work:
 
 ```
 reproduce https://arxiv.org/abs/XXXX.XXXXX  (optionally: repo https://github.com/...)
 ```
 
-The `repro-create` skill drives the rest.
+The `repro-create` skill drives everything from there: ingest, gap analysis,
+plan, run, report. All state lands in a single `.repro/` folderCan you  at the project
+root, so the work **survives restarts and context resets** — pick up exactly
+where you left off, and hand the folder to anyone who wants to check your work.
 
-## Workflow
+## How it works
 
 ```
 ingest paper ─► extract claims (claims.json) ─► gap-analyze repo (gap.md) ─► plan (plan.md)
@@ -44,7 +79,10 @@ ingest paper ─► extract claims (claims.json) ─► gap-analyze repo (gap.md
  report.md   (per claim: ✓ reproduced / ~ partial / ✗ mismatch / ⛔ blocked / · pending)
 ```
 
-## Tools
+The whole thing is verification, not optimization. When a claim doesn't
+reproduce, that's a finding — not a bug to paper over.
+
+### Tools
 
 | Tool | What it does |
 |------|--------------|
@@ -54,7 +92,7 @@ ingest paper ─► extract claims (claims.json) ─► gap-analyze repo (gap.md
 | `log_result` | Record a reproduced value and classify it vs the reported value. |
 | `reproduction_status` | Show all claims, reported vs reproduced, and totals. |
 
-## Skills
+### Skills
 
 | Skill | Role |
 |-------|------|
@@ -63,9 +101,10 @@ ingest paper ─► extract claims (claims.json) ─► gap-analyze repo (gap.md
 | `repro-gap-analysis` | Reference repo → `gap.md` (implemented vs missing). |
 | `repro-report` | Claims + logs → `report.md`. |
 
-## The `.repro/` session
+### The `.repro/` session
 
-All state lives in one folder at the root of the project being reproduced:
+All state lives in one folder at the root of the project being reproduced — human
+readable, version-controllable, and the single source of truth:
 
 | File | Purpose |
 |------|---------|
@@ -79,7 +118,7 @@ All state lives in one folder at the root of the project being reproduced:
 | `env/setup.sh` | reproducible environment setup |
 | `sources/` | downloaded paper artifacts / clone notes |
 
-## How claims are judged
+### How claims are judged
 
 `log_result` compares the reproduced value to the reported value using a relative
 tolerance (default 5%, configurable per-claim or per-session):
@@ -89,6 +128,9 @@ tolerance (default 5%, configurable per-claim or per-session):
 - within 3× tolerance → **partial** (`~`)
 - further off → **mismatch** (`✗`)
 - couldn't run → **blocked** (`⛔`)
+
+No grade inflation: a number only counts as reproduced when the method that
+produced it is the paper's method.
 
 ## Configuration
 
