@@ -11,6 +11,16 @@ export interface ReproConfig {
   paperSource: string;
   /** Optional reference implementation to start from. */
   repoUrl?: string;
+  /** Language to reproduce the work in, e.g. "python", "r", "julia". */
+  language?: string;
+  /** Whether to isolate dependencies in a language-appropriate virtual environment. */
+  useVirtualEnv?: boolean;
+  /**
+   * How the method is being reproduced. Decided after gap-analysis, when a
+   * complete/installable implementation exists: "package" uses that artifact,
+   * "from_scratch" reimplements the method from the paper.
+   */
+  implementationMode?: "package" | "from_scratch";
   /** Working directory for reproduction commands (defaults to the project root). */
   workingDir?: string;
   /** Default relative tolerance applied to claims that don't set their own. */
@@ -39,6 +49,8 @@ export function makeConfig(params: {
   name: string;
   paperSource: string;
   repoUrl?: string;
+  language?: string;
+  useVirtualEnv?: boolean;
   workingDir?: string;
   defaultTolerance?: number;
   maxClaimLoopIters?: number;
@@ -47,6 +59,8 @@ export function makeConfig(params: {
     name: params.name,
     paperSource: params.paperSource,
     repoUrl: params.repoUrl,
+    language: params.language,
+    useVirtualEnv: params.useVirtualEnv,
     workingDir: params.workingDir,
     defaultTolerance: params.defaultTolerance ?? DEFAULT_TOLERANCE,
     maxClaimLoopIters: params.maxClaimLoopIters ?? DEFAULT_MAX_CLAIM_LOOP_ITERS,

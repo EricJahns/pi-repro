@@ -49,7 +49,7 @@ quietly leaving the method behind — because the gap between "the paper says
   match the paper, or hand maintainers an auditable report instead of a vague
   "I couldn't get your numbers."
 - **Peer reviewers & area chairs** — turn "the authors claim X" into "I ran it
-  and got X (or didn't)" before you sign off, with a paper trail you can attach.
+  and got X (or didn't)", with a paper trail you can attach.
 
 ## Install
 
@@ -87,6 +87,11 @@ ingest paper ─► extract claims (claims.json) ─► gap-analyze repo (gap.md
 The whole thing is verification, not optimization. When a claim doesn't
 reproduce, that's a finding — not a bug to paper over.
 
+When gap-analysis finds that the method already ships as a complete, installable
+package, pi-repro **stops and asks you**: use the existing package (validates the
+*result* fast) or reimplement from scratch (a stronger test of whether the *paper*
+is reproducible from its description). Your choice is recorded in `config.json`.
+
 ### Tools
 
 | Tool | What it does |
@@ -113,7 +118,7 @@ readable, version-controllable, and the single source of truth:
 
 | File | Purpose |
 |------|---------|
-| `config.json` | name, paper source, repo, tolerance, loop budget |
+| `config.json` | name, paper source, repo, language, virtualenv, implementation mode, tolerance, loop budget |
 | `paper.md` | extracted summary, method, datasets, hyperparams, compute |
 | `claims.json` | structured claims — the source of truth for status |
 | `gap.md` | implemented vs missing/partial analysis of the reference repo |

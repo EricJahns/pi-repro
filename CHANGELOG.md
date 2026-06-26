@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 — 2026-06-26
+
+- Setup now records the reproduction `language` and whether to use a virtual
+  environment (`init_reproduction` params; `config.json`).
+- New required checkpoint: when a complete/installable implementation of the
+  method already exists, `repro-create` asks the user whether to use that package
+  or reimplement from scratch, recorded as `implementationMode` in `config.json`.
+- Skills emphasize environment/build debugging (a top reproduction blocker) and
+  emitting one clean parseable metric line per result.
+
 ## 0.1.0
 
 Initial release.

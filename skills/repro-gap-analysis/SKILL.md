@@ -24,6 +24,14 @@ plan can target the gaps.
 4. **Map claims → reproducibility.** For each registered claim, determine whether
    the repo can produce it and how.
 
+5. **Check for a complete, installable implementation.** Is the method already
+   shipped as a standard package (pip / conda / CRAN / npm / …) or a repo that
+   runs end-to-end? If so, the results may be reproducible *directly* from that
+   artifact. Flag this prominently — it triggers a required user decision in
+   **repro-create** (use the existing package vs reimplement from scratch). Note
+   what the package does and does not cover (e.g. it implements the method but
+   ships no experiment/eval harness for the paper's tables).
+
 ## Classify honestly
 
 For every method component and every claim, assign one of:
@@ -51,8 +59,10 @@ Write a table plus prose:
 |----------|---------------|----------------|----------------|
 
 Then summarize: what you can reproduce directly, what needs implementation work,
-and what is likely blocked (and why). This summary feeds straight into the plan.
+what is likely blocked (and why), and **whether a complete/installable
+implementation exists**. This summary feeds straight into the plan.
 
-Hand back to **repro-create** for planning. Where the repo is missing/partial, the
-plan must include implementing those pieces from the paper before reproducing the
-affected claims.
+Hand back to **repro-create**. If a complete implementation exists, repro-create
+must ask the user whether to use it or reimplement from scratch *before* planning.
+Where the repo is missing/partial, the plan must include implementing those pieces
+from the paper before reproducing the affected claims.

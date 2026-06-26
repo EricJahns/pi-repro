@@ -58,6 +58,8 @@ export default function reproExtension(pi: ExtensionAPI): void {
     name: Type.String({ description: "Human-readable name for this reproduction session, e.g. 'ResNet CIFAR-10 reproduction'." }),
     paper_source: Type.String({ description: "The paper: an arXiv id/URL, DOI, web URL, or local PDF path." }),
     repo_url: Type.Optional(Type.String({ description: "Optional reference implementation (GitHub URL or local path) to start from. Even when given, expect it to be incomplete — verify what is and isn't implemented." })),
+    language: Type.Optional(Type.String({ description: "Language to reproduce the work in, e.g. 'python', 'r', 'julia'. Ask the user; if a reference repo exists, its language is a sensible default." })),
+    use_virtual_env: Type.Optional(Type.Boolean({ description: "Whether to isolate dependencies in a language-appropriate virtual environment (e.g. venv/conda for Python, renv for R). Ask the user." })),
     default_tolerance: Type.Optional(Type.Number({ description: "Default relative tolerance for matching reported values (fraction, e.g. 0.05 = 5%). Defaults to 0.05." })),
     max_claim_loop_iters: Type.Optional(Type.Number({ description: "Max iterations for the optional per-claim debug loop. Defaults to 8." })),
     working_dir: Type.Optional(Type.String({ description: "Directory in which reproduction commands run. Defaults to the project root." })),
@@ -86,6 +88,8 @@ export default function reproExtension(pi: ExtensionAPI): void {
         name: params.name,
         paperSource: params.paper_source,
         repoUrl: params.repo_url,
+        language: params.language,
+        useVirtualEnv: params.use_virtual_env,
         workingDir: params.working_dir,
         defaultTolerance: params.default_tolerance,
         maxClaimLoopIters: params.max_claim_loop_iters,
@@ -97,10 +101,14 @@ export default function reproExtension(pi: ExtensionAPI): void {
       appendLog(p.log, { event: "init", name: config.name, paperSource: config.paperSource, repoUrl: config.repoUrl });
 
       refreshWidget(ctx, root);
+      const envLine = config.language
+        ? `Language: ${config.language}${config.useVirtualEnv ? " — set up an isolated virtual environment" : ""}. Capture setup in ${p.envSetup}.`
+        : `Language not set — confirm it with the user and record env setup in ${p.envSetup}.`;
       return textResult(
         [
           `Initialized reproduction session "${config.name}".`,
           `Session dir: ${p.dir}`,
+          envLine,
           `Next: ingest the paper into ${p.paper}, then register each quantitative result with register_claim.`,
           config.repoUrl
             ? `A reference repo was provided (${config.repoUrl}) — gap-analyze it (implemented vs missing) into ${p.gap} before reproducing.`

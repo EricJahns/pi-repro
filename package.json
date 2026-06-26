@@ -1,6 +1,6 @@
 {
   "name": "pi-repro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Reproduce the quantitative results of an academic paper — ingest, gap-analyze the code, plan, reproduce each claim, and report what does and doesn't replicate. A pi extension.",
   "keywords": [
@@ -29,6 +29,7 @@
   "files": [
     "extensions",
     "skills",
+    "assets",
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
