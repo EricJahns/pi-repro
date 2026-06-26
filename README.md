@@ -39,20 +39,17 @@ quietly leaving the method behind — because the gap between "the paper says
 
 ## Why you'd want this
 
-- **Peer reviewers & area chairs** — turn "the authors claim X" into "I ran it
-  and got X (or didn't)" before you sign off, with a paper trail you can attach.
-- **PhD students & researchers** — before you build on someone's result, confirm
+- **Researchers** — before you build on someone's result, confirm
   the foundation holds. Reproduce the baseline you're about to beat so your
   delta is real and not a difference in setup.
 - **ML engineers** — vet a flashy SOTA claim against your own hardware and data
   pipeline before you bet a sprint on integrating it.
-- **Reproducibility & ML-reproducibility-challenge teams** — run a fleet of
-  papers through one consistent, auditable pipeline instead of a pile of
-  bespoke shell scripts.
-- **Educators** — hand students a paper and a reproduction report side by side,
-  and teach them where published numbers come from (and where they leak).
-- **Your future self** — six months from now, when a reviewer asks "did this
-  actually work?", the `.repro/` folder already has the receipts.
+- **Open-source contributors** — reproduce a paper's results to back a
+  from-scratch implementation, file an issue when the published code doesn't
+  match the paper, or hand maintainers an auditable report instead of a vague
+  "I couldn't get your numbers."
+- **Peer reviewers & area chairs** — turn "the authors claim X" into "I ran it
+  and got X (or didn't)" before you sign off, with a paper trail you can attach.
 
 ## Install
 
