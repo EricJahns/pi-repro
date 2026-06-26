@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="pi-repro logo" width="800">
+  <img src="assets/logo.svg" alt="pi-repro logo" width="650">
 </p>
-
-<h1 align="center">pi-repro</h1>
 
 > **Trust, but verify — one claim at a time.**
 
@@ -10,7 +8,23 @@ A [pi](https://pi.dev) extension with one job: **reproduce the quantitative
 results of an academic paper**, and tell you honestly which ones survive contact
 with reality.
 
+<div align="center">
+
 **[Install](#install) · [Usage](#usage) · [How it works](#how-it-works)**
+
+</div>
+
+A paper lands on your desk claiming 94.2% accuracy. There's no code — or there's
+a repo that's missing the training script, hardcodes a path to someone's laptop,
+and references a config file that isn't in the commit. You need to know: does the
+number hold? Today that means days of archaeology — guessing at hyperparameters,
+reconstructing the data pipeline from a figure caption, and slowly losing track
+of which of the paper's ten claims you've actually checked.
+
+pi-repro does that archaeology for you. It treats the paper as the source of
+truth and the code as a lead to follow, not a thing to trust. It reconstructs
+what's missing, runs what it can, and refuses to fudge the difference between
+what the paper said and what your machine did.
 
 You hand it a paper (link, PDF, arXiv id, or DOI) and — optionally — a reference
 GitHub repo. It reads the paper, pulls out every number you care about as a
@@ -18,16 +32,10 @@ tracked *claim*, audits the shipped code for the gaps it always has, plans the
 reproduction, runs each experiment, and files a report on what replicated, what
 didn't, and what flat-out refused to run.
 
-It shares its blueprint with
-[`pi-autoresearch`](https://github.com/davebcn87/pi-autoresearch): the
-**extension** is domain-agnostic machinery; the **skills** carry the domain
-knowledge. The difference is the goal. Autoresearch *optimizes* — it tunes until
-the number goes up. pi-repro *verifies* — it follows the paper's method and
-reports whatever falls out, even when that's an inconvenient truth. It will never
-nudge a result toward the published value by quietly leaving the method behind.
-
-Because the gap between "the paper says 94.2%" and "I got 94.2% on my machine" is
-where science actually happens.
+It follows the paper's method and reports whatever falls out, even when that's an
+inconvenient truth. It will never nudge a result toward the published value by
+quietly leaving the method behind — because the gap between "the paper says
+94.2%" and "I got 94.2% on my machine" is where science actually happens.
 
 ## Why you'd want this
 
