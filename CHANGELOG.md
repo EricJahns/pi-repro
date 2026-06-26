@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-06-26
 
 - Claim grading is now **uncertainty-relative**: when a claim carries a
   `reported_std` (paper reports mean ± σ), agreement is judged in units of σ
